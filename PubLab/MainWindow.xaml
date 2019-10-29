@@ -23,7 +23,7 @@
         <Label x:Name="labelAvailableGlasses" Content="Available glasses" HorizontalAlignment="Left" Margin="220.445,117,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Label x:Name="labelAvailableChairs" Content="Available Chairs" HorizontalAlignment="Left" Margin="220.445,152,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Label x:Name="labelClosingTime" Content="Closing in:" HorizontalAlignment="Left" Margin="220.445,187,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
-        <Button x:Name="closeBarButton" Content="Close bar" HorizontalAlignment="Left" Margin="305,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="CloseBarButton_Click" IsEnabled="False"/>
+        <Button x:Name="closeBarButton" Content="Close bar" HorizontalAlignment="Left" Margin="55,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="CloseBarButton_Click" IsEnabled="False"/>
 
     </Grid>
 </Window>

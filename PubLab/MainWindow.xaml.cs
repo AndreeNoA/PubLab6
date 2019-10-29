@@ -31,13 +31,17 @@ namespace PubLab
         public MainWindow()
         {
             InitializeComponent();
+            closeBarButton.Visibility = Visibility.Hidden;
         }
 
         private void OpenBarButton_Click(object sender, RoutedEventArgs e)
         {
             openBarButton.IsEnabled = false;
+            openBarButton.Visibility = Visibility.Hidden;
             closeBarButton.IsEnabled = true;
+            closeBarButton.Visibility = Visibility.Visible;
             CountdownTimer();
+            CustomersListBox.Items.Insert(0, "Bar has opened");
             Task.Run(() => { Bouncer(AddToLists); });
             Task.Run(() => { UpdateLabels(); });
         }
@@ -102,7 +106,10 @@ namespace PubLab
         private void CloseBarButton_Click(object sender, RoutedEventArgs e) //Using time to close bar instead of cancellationToken, so that number of guests still count down when closing the bar with button
         {
             closeBarButton.IsEnabled = false;
+            closeBarButton.Visibility = Visibility.Hidden;
             timeToClose = 1;
+            openBarButton.IsEnabled = true;
+            openBarButton.Visibility = Visibility.Visible;
         }
 
         private void CountdownTimer()

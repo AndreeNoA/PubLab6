@@ -13,7 +13,6 @@ namespace PubLab.Agents
         Random random = new Random();
         public static int guestsInPub;
         private Action<string, object> LogText { get; set; }
-        public List<Guest> CurrentGuests { get; private set; }
 
 
         public static string[] nameList = new string[]

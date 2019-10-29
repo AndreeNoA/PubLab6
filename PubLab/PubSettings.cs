@@ -16,5 +16,12 @@ namespace PubLab
         {
             return instance;
         }
+
+        private int numOfGlasses = 8;
+        private int numOfChairs = 9;
+        private int openDuration = 120;
+        private int bouncerMaxNewGuestTimer = 10;
+        private int bouncerMinNewGuestTimer = 3;
+
     }
 }
