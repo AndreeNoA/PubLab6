@@ -19,7 +19,7 @@
         <Label x:Name="labelWaiter" Content="Waiter" HorizontalAlignment="Left" Margin="305,46,0,0" VerticalAlignment="Top"/>
         <Label x:Name="labelCustomer" Content="Customers" HorizontalAlignment="Left" Margin="555,46,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.09,0.295"/>
         <Button x:Name="openBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="55,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="OpenBarButton_Click"/>
-        <Label x:Name="labelGuestsAtBar" Content="Guests at bar" HorizontalAlignment="Left" Margin="220.445,77,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
+        <Label x:Name="labelGuestsAtBar" Content="Guests at bar" HorizontalAlignment="Left" Margin="220,77,0,0" VerticalAlignment="Top" Height="35" Width="193" Grid.Column="1"/>
         <Label x:Name="labelAvailableGlasses" Content="Available glasses" HorizontalAlignment="Left" Margin="220.445,117,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Label x:Name="labelAvailableChairs" Content="Available Chairs" HorizontalAlignment="Left" Margin="220.445,152,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Label x:Name="labelClosingTime" Content="Closing in:" HorizontalAlignment="Left" Margin="220.445,187,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
