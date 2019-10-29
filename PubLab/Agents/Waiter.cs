@@ -4,9 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PubLab.Agents
+namespace PubLab
 {
-    class Waiter
+    class Waiter : TimeAndItems
     {
+        public void WaiterActions(Action<string, object> printBartenderListBox)
+        {
+            while (PubSettings.MyInstance().openCountdown > 0)
+            {
+                printBartenderListBox("då", this);
+                TimeToWait(2);
+            }
+        }
     }
 }

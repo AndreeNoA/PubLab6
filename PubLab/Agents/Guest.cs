@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace PubLab.Agents
+namespace PubLab
 {
 
-    public class Guest : AgentsBase
+    public class Guest : TimeAndItems
     {
         public string Name { get; private set; }
         Random random = new Random();
         public static int guestsInPub;
+        Chair chair = new Chair();
+        //Glass glass = new Glass();
         private Action<string, object> LogText { get; set; }
-
 
         public static string[] nameList = new string[]
         {
@@ -54,25 +57,43 @@ namespace PubLab.Agents
 
         public void GuestActions(Action<string, object> logText)
         {
+            bool isChairFree = MainWindow.chairs.itemQueue.TryPeek(out chair);
             LogText = logText;
-            GuestEnter();            
+
+            GuestEnter();
+            GuestLookingForChair();
+            while (!isChairFree)
+            {
+                Thread.Sleep(100);
+            }
             GuestDrinks();
+            //GuestDrinks();
             GuestLeaves();
         }
         private void GuestEnter()
         {
             guestsInPub++;
-            LogText?.Invoke($"{Name} enters the bar", this);
+            LogText?.Invoke($"{Name} enters BaBar, and goes to the bar", this);
+            TimeToWait(PubSettings.MyInstance().guestWalkToBar);
+            // add guest to guestQueue
+            // give beer to guest when first in queue
+            
+        }
+        private void GuestLookingForChair()
+        {
+            LogText?.Invoke($"{Name} takes the beer and looks for a chair", this);
+            TimeToWait(PubSettings.MyInstance().guestWalkToChair);
         }
         private void GuestDrinks()
         {
-            TimeToWait(random.Next(5, 10));
-            LogText?.Invoke($"{Name} drinks a beer", this);
+            MainWindow.chairs.itemQueue.TryTake(out chair);
+            LogText?.Invoke($"{Name} sits down and drinks the beer", this);
+            TimeToWait(random.Next(PubSettings.MyInstance().guestDrinkBeerMinTime, PubSettings.MyInstance().guestDrinkBeerMaxTime));
         }
         private void GuestLeaves()
         {
-            TimeToWait(random.Next(5, 8));
             LogText?.Invoke($"{Name} leaves the bar", this);
+            MainWindow.chairs.itemQueue.Add(chair);
             guestsInPub--;
         }
     }

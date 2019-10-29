@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PubLab.Agents
+namespace PubLab
 {
-    public class Bouncer : AgentsBase
+    public class Bouncer : TimeAndItems
     {
     }
 }
