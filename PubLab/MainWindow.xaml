@@ -14,15 +14,15 @@
         </Grid.ColumnDefinitions>
         <ListBox x:Name="BartenderListBox" HorizontalAlignment="Left" Height="259" Margin="55,77,0,0" VerticalAlignment="Top" Width="230"/>
         <ListBox x:Name="WaiterListBox" HorizontalAlignment="Left" Height="259" Margin="305,77,0,0" VerticalAlignment="Top" Width="230"/>
-        <ListBox x:Name="CustomersListBox" HorizontalAlignment="Left" Height="259" Margin="555,77,0,0" VerticalAlignment="Top" Width="230" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="GuestListBox" HorizontalAlignment="Left" Height="259" Margin="555,77,0,0" VerticalAlignment="Top" Width="293" Grid.ColumnSpan="2"/>
         <Label x:Name="labelBartender" Content="Bartender" HorizontalAlignment="Left" Margin="55,46,0,0" VerticalAlignment="Top"/>
         <Label x:Name="labelWaiter" Content="Waiter" HorizontalAlignment="Left" Margin="305,46,0,0" VerticalAlignment="Top"/>
         <Label x:Name="labelCustomer" Content="Customers" HorizontalAlignment="Left" Margin="555,46,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.09,0.295"/>
         <Button x:Name="openBarButton" Content="Open bar" HorizontalAlignment="Left" Margin="55,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="OpenBarButton_Click"/>
-        <Label x:Name="labelGuestsAtBar" Content="Guests at bar" HorizontalAlignment="Left" Margin="220,77,0,0" VerticalAlignment="Top" Height="35" Width="193" Grid.Column="1"/>
-        <Label x:Name="labelAvailableGlasses" Content="Available glasses" HorizontalAlignment="Left" Margin="220.445,117,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
-        <Label x:Name="labelAvailableChairs" Content="Available Chairs" HorizontalAlignment="Left" Margin="220.445,152,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
-        <Label x:Name="labelClosingTime" Content="Closing in:" HorizontalAlignment="Left" Margin="220.445,187,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
+        <Label x:Name="labelGuestsAtBar" Content="Number of guests in pub: 0" HorizontalAlignment="Left" Margin="220,77,0,0" VerticalAlignment="Top" Height="35" Width="201" Grid.Column="1"/>
+        <Label x:Name="labelAvailableGlasses" Content="Number of clean glasses: 0" HorizontalAlignment="Left" Margin="220,117,0,0" VerticalAlignment="Top" Height="35" Width="201" Grid.Column="1"/>
+        <Label x:Name="labelAvailableChairs" Content="Available Chairs: 0" HorizontalAlignment="Left" Margin="220,152,0,0" VerticalAlignment="Top" Height="35" Width="201" Grid.Column="1"/>
+        <Label x:Name="labelClosingTime" Content="Time to closing: 0" HorizontalAlignment="Left" Margin="220.445,187,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Button x:Name="closeBarButton" Content="Close bar" HorizontalAlignment="Left" Margin="55,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="CloseBarButton_Click" IsEnabled="False"/>
 
     </Grid>

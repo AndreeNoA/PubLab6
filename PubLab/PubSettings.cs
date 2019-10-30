@@ -12,17 +12,18 @@ namespace PubLab
         {
         }
         private static PubSettings instance = new PubSettings();
-        public static PubSettings MyInstance()
+        public static PubSettings MyPub()
         {
             return instance;
         }
 
         public int numOfUsedGlasses;
         public int numOfGlasses = 8; // 8
-        public int numOfChairs = 2; // 9
+        public int numOfChairs = 9; // 9
         public int openDuration = 120; // 120 
         public int openCountdown;
         public int bouncerMinNewGuestTimer = 3; // 3
+        public int bouncerMaxNewGuestTimer = 10; // 10
         public int waiterPickUpGlassesTime = 10; // 10
         public int waiterCleanGlassesTime = 15; // 15
         public int bartenderFetchGlassTime = 3; // 3
@@ -33,6 +34,5 @@ namespace PubLab
         public int guestDrinkBeerMinTime = 20; //20
         public bool pubOpen = true;
 
-        //public int OpenDuration { get { return openDuration; } set { openDuration = value; } }
     }
 }

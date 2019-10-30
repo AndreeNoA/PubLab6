@@ -22,22 +22,25 @@ namespace PubLab
     public partial class MainWindow : Window
     {
         private int actionCount = 1;
-        static Random random = new Random();
         private static CancellationTokenSource cancelProgramTokenSource = new CancellationTokenSource();
         public CancellationToken cancelProgramToken = cancelProgramTokenSource.Token;
-        public static Items<Chair> chairs;
-        public static Items<Glass> glasses;
+        public static ItemsBag<Chair> chairs;
+        public static ItemsBag<CleanGlass> cleanGlasses;
+        public static ItemsCollection<DirtyGlass> dirtyGlasses;
+        public static ItemsBag<GlassOnTray> trayOfDirtyGlasses;
 
 
         public MainWindow()
         {
             InitializeComponent();
             closeBarButton.Visibility = Visibility.Hidden;
-            chairs = new Items<Chair>();
-            glasses = new Items<Glass>();
+            chairs = new ItemsBag<Chair>();
+            cleanGlasses = new ItemsBag<CleanGlass>();
+            dirtyGlasses = new ItemsCollection<DirtyGlass>();
+            trayOfDirtyGlasses = new ItemsBag<GlassOnTray>();
 
-            chairs.CreateItems(new Chair(), PubSettings.MyInstance().numOfChairs);
-            glasses.CreateItems(new Glass(), PubSettings.MyInstance().numOfGlasses);
+            chairs.CreateItems(new Chair(), PubSettings.MyPub().numOfChairs);
+            cleanGlasses.CreateItems(new CleanGlass(), PubSettings.MyPub().numOfGlasses);
         }
 
         private void OpenBarButton_Click(object sender, RoutedEventArgs e)
@@ -46,27 +49,19 @@ namespace PubLab
             openBarButton.Visibility = Visibility.Hidden;
             closeBarButton.IsEnabled = true;
             closeBarButton.Visibility = Visibility.Visible;
-            PubSettings.MyInstance().openCountdown = PubSettings.MyInstance().openDuration;
+            PubSettings.MyPub().openCountdown = PubSettings.MyPub().openDuration;
             CountdownTimer();
-            CustomersListBox.Items.Insert(0, "Bar has opened");
+            GuestListBox.Items.Insert(0, "Bar has opened");
 
             Bartender bartender = new Bartender();
             Waiter waiter = new Waiter();
-            Task.Run(() => { Bouncer(AddToLists); });
-            Task.Run(() => { bartender.BartenderActions(AddToLists, glasses); });
-            Task.Run(() => { waiter.WaiterActions(AddToLists); });
-            Task.Run(() => { UpdateLabels(); });
-            
+            Bouncer bouncer = new Bouncer();
+            Task.Run(() => { bouncer.BouncerActions(AddToLists); });
+            Task.Run(() => { bartender.BartenderActions(AddToLists, cleanGlasses); });
+            Task.Run(() => { waiter.WaiterActions(AddToLists, cleanGlasses, dirtyGlasses, trayOfDirtyGlasses); });
+            Task.Run(() => { UpdateLabels(); });           
         }
         
-        public void Bouncer(Action<string, object> logText)
-        {            
-            while (PubSettings.MyInstance().openCountdown > 0)
-            {
-                Guest.TimeToWait(random.Next(1, 5));
-                CreateGuest(logText);               
-            }
-        }
         private void AddToLists(string action, object sender)
         {
             action = $"{actionCount++}. {action}";
@@ -75,7 +70,7 @@ namespace PubLab
                 switch (sender)
                 {
                     case Guest _:
-                        CustomersListBox.Items.Insert(0, action);                        
+                        GuestListBox.Items.Insert(0, action);                        
                         break;
                     case Bartender _:
                         BartenderListBox.Items.Insert(0, action);
@@ -83,18 +78,10 @@ namespace PubLab
                     case Waiter _:
                         WaiterListBox.Items.Insert(0, action);
                         break;
-                    //case Bouncer _:
-                    //    GuestListBox.Items.Insert(0, action);
-                    //    break;
+                    case Bouncer _:
+                        GuestListBox.Items.Insert(0, action);
+                        break;
                 }
-            });
-        }
-        public void CreateGuest(Action<string, object> logText)
-        {
-            Task.Run(() =>
-            {
-                Guest guest = new Guest();          
-                guest.GuestActions(logText);
             });
         }
 
@@ -105,9 +92,9 @@ namespace PubLab
                 Dispatcher.Invoke(() =>
                 {
                     labelGuestsAtBar.Content = $"Number of guests in pub: {Guest.guestsInPub}";
-                    labelClosingTime.Content = $"Time to closing: {PubSettings.MyInstance().openCountdown}";
-                    labelAvailableChairs.Content = $"Number of used chairs: {chairs.GetNumOfItems()}";
-                    labelAvailableGlasses.Content = $"Number of clean glasses: {glasses.GetNumOfItems()}";
+                    labelClosingTime.Content = $"Time to closing: {PubSettings.MyPub().openCountdown}";
+                    labelAvailableChairs.Content = $"Available Chairs: {chairs.itemBag.Count}";
+                    labelAvailableGlasses.Content = $"Number of clean glasses: {cleanGlasses.itemBag.Count}";
                 });
                 Thread.Sleep(100);
             }
@@ -118,27 +105,25 @@ namespace PubLab
             cancelProgramTokenSource.Cancel();
         }
 
-        private void CloseBarButton_Click(object sender, RoutedEventArgs e) //Using time to close bar instead of cancellationToken, so that number of guests still count down when closing the bar with button
+        private void CloseBarButton_Click(object sender, RoutedEventArgs e) //Using time to close bar
         {
             closeBarButton.IsEnabled = false;
             closeBarButton.Visibility = Visibility.Hidden;
-            PubSettings.MyInstance().openCountdown = 1;
+            PubSettings.MyPub().openCountdown = 1;
             openBarButton.IsEnabled = true;
             openBarButton.Visibility = Visibility.Visible;
         }
 
         private void CountdownTimer()
         {
-            //timeToClose = 120;
             Task.Run(() =>
             {
-                while (PubSettings.MyInstance().openCountdown > 0)
+                while (PubSettings.MyPub().openCountdown > 0)
                 {
                     Guest.TimeToWait(1);
-                    PubSettings.MyInstance().openCountdown--;
+                    PubSettings.MyPub().openCountdown--;
                 }                
-            });
-            
+            });            
         }
     }
 }
