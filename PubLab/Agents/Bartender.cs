@@ -7,34 +7,34 @@ using System.Threading.Tasks;
 
 namespace PubLab
 {
-    public class Bartender : TimeAndItems
+    public class Bartender : TimeAndLog
     {
-        public void BartenderActions(Action<string, object> printBartenderListBox, ItemsBag<CleanGlass> cleanGlasses)
+        public void BartenderActions(Action<string, object> printBartenderListBox, Puben pub, PubSettings pubset)
         {
-            while (PubSettings.MyPub().openCountdown > 0 || Guest.guestsInPub > 0)
+            while (pubset.OpenCountdown > 0 || pub.guestsInPub > 0)
             {
-                if (Guest.guestsInPub == 0 && PubSettings.MyPub().openCountdown > 0)
+                if (pub.guestsInPub == 0 && pubset.OpenCountdown > 0)
                 {
                     printBartenderListBox("Bartender waiting for guest", this);
                     TimeToWait(5);
                 }
-                if (QueueAtBar.Count > 0)
+                if (pub.QueueAtBar.Count > 0)
                 {
                     printBartenderListBox("Goes to shelf", this);
-                    while (cleanGlasses.itemBag.Count == 0)
+                    while (pub.cleanGlasses.itemBag.Count == 0)
                         Thread.Sleep(1000);
 
-                    if (cleanGlasses.itemBag.Count > 0)
+                    if (pub.cleanGlasses.itemBag.Count > 0)
                     {
-                        TimeToWait(PubSettings.MyPub().bartenderFetchGlassTime);
-                        cleanGlasses.itemBag.TryTake(out cleanGlass);
-                        printBartenderListBox("Pours beer to " + QueueAtBar.First().Name, this);                    
-                        TimeToWait(PubSettings.MyPub().bartenderPourBeerTime);
-                        QueueToChair.Add(QueueAtBar.First());
-                        QueueAtBar.Take();
+                        TimeToWait(pubset.BartenderFetchGlassTime);
+                        pub.cleanGlasses.itemBag.TryTake(out pub.cleanGlass);
+                        printBartenderListBox("Pours beer to " + pub.QueueAtBar.First().Name, this);                    
+                        TimeToWait(pubset.BartenderPourBeerTime);
+                        pub.QueueToChair.Add(pub.QueueAtBar.First());
+                        pub.QueueAtBar.Take();
                     }
                 }
-                if (QueueAtBar.Count == 0 && PubSettings.MyPub().openCountdown == 0)
+                if (pub.QueueAtBar.Count == 0 && pubset.OpenCountdown == 0)
                 {
                     printBartenderListBox("Bartender goes home", this);
                     break;

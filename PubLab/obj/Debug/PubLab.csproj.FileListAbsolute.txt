@@ -13,3 +13,17 @@ C:\Users\NoAnger\source\repos\PubLab\PubLab\obj\Debug\PubLab.csproj.GenerateReso
 C:\Users\NoAnger\source\repos\PubLab\PubLab\obj\Debug\PubLab.csproj.CoreCompileInputs.cache
 C:\Users\NoAnger\source\repos\PubLab\PubLab\obj\Debug\PubLab.exe
 C:\Users\NoAnger\source\repos\PubLab\PubLab\obj\Debug\PubLab.pdb
+C:\Users\zlata\source\repos\PubLab\PubLab\bin\Debug\PubLab.exe.config
+C:\Users\zlata\source\repos\PubLab\PubLab\bin\Debug\PubLab.exe
+C:\Users\zlata\source\repos\PubLab\PubLab\bin\Debug\PubLab.pdb
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.csprojAssemblyReference.cache
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\MainWindow.g.cs
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\App.g.cs
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab_MarkupCompile.cache
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab_MarkupCompile.lref
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\MainWindow.baml
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.g.resources
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.Properties.Resources.resources
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.csproj.GenerateResource.cache
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.exe
+C:\Users\zlata\source\repos\PubLab\PubLab\obj\Debug\PubLab.pdb
