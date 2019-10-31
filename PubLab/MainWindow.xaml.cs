@@ -28,21 +28,26 @@ namespace PubLab
         public MainWindow()
         {
             InitializeComponent();
+            openBarButton.IsEnabled = false;
             closeBarButton.Visibility = Visibility.Hidden;
-            userset.BusOfGuests();
-            pub.CreatePub(userset);
         }
 
         private void OpenBarButton_Click(object sender, RoutedEventArgs e)
         {
+            pub.CreatePub(userset);
+            CountdownTimer();
             openBarButton.IsEnabled = false;
             openBarButton.Visibility = Visibility.Hidden;
             closeBarButton.IsEnabled = true;
             closeBarButton.Visibility = Visibility.Visible;
+            simulationChoiceMenu.Visibility = Visibility.Hidden;
+            WaiterListBox.Items.Clear();
+            BartenderListBox.Items.Clear();
+            GuestListBox.Items.Clear();
+            actionCount = 0;
+            GuestListBox.Items.Insert(0, "BaBar has opened");
             userset.PubOpenButton = false;
             userset.OpenCountdown = userset.BarOpenDuration;            
-            CountdownTimer();
-            GuestListBox.Items.Insert(0, "BaBar has opened");
 
             Bartender bartender = new Bartender();
             Waiter waiter = new Waiter();
@@ -91,6 +96,10 @@ namespace PubLab
                         {
                         openBarButton.IsEnabled = true;
                         }
+                    if (userset.OpenCountdown == 0 && openBarButton.IsEnabled == true)
+                    {
+                        simulationChoiceMenu.Visibility = Visibility.Visible;
+                    }
                 }));
                 Thread.Sleep(100);
             }
@@ -119,6 +128,45 @@ namespace PubLab
                     this.userset.OpenCountdown--;
                 }                
             }));            
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (simulationChoiceMenu.SelectedIndex)
+            {
+                case 0:
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 1:
+                    userset.TwentyGlassesThreeChairs();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 2:
+                    userset.FiveGlassesTwentyChairs();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 3:
+                    userset.SlowGuests();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 4:
+                    userset.WaiterOnSpeed();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 5:
+                    userset.BarDoubleOpenTime();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 6:
+                    userset.CouplesNight();
+                    openBarButton.IsEnabled = true;
+                    break;
+                case 7:
+                    userset.BusOfGuests();
+                    openBarButton.IsEnabled = true;
+                    break;
+            }
+               
         }
     }
 }

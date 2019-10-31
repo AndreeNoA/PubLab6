@@ -24,6 +24,16 @@
         <Label x:Name="labelAvailableChairs" Content="Available Chairs: 0" HorizontalAlignment="Left" Margin="220,152,0,0" VerticalAlignment="Top" Height="35" Width="201" Grid.Column="1"/>
         <Label x:Name="labelClosingTime" Content="Time to closing: 0" HorizontalAlignment="Left" Margin="220.445,187,0,0" VerticalAlignment="Top" Height="35" Width="156" Grid.Column="1"/>
         <Button x:Name="closeBarButton" Content="Close bar" HorizontalAlignment="Left" Margin="55,415,0,0" VerticalAlignment="Top" Width="230" Height="72" Click="CloseBarButton_Click" IsEnabled="False"/>
+        <ComboBox x:Name="simulationChoiceMenu" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="535,403,0,0" VerticalAlignment="Top" Width="180" Height="33" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBoxItem Content="Standard"/>
+            <ComboBoxItem Content="20 glasses and 3 chairs"/>
+            <ComboBoxItem Content="20  chairs and 5 glasses"/>
+            <ComboBoxItem Content="Guest are slow"/>
+            <ComboBoxItem Content="Waiter are fast"/>
+            <ComboBoxItem Content="Open 5 minutes"/>
+            <ComboBoxItem Content="Couples night"/>
+            <ComboBoxItem Content="Buss"/>
+        </ComboBox>
 
     </Grid>
 </Window>
