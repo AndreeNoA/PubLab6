@@ -38,6 +38,7 @@ namespace PubLab
                 }                
             }
             printWaiterListBox("Waiter goes home", this);
+            PubSettings.MyPub().pubOpenButton = true;
         }
     }
 }

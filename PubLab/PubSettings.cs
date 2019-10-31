@@ -32,7 +32,7 @@ namespace PubLab
         public int guestWalkToChair = 4; // 4
         public int guestDrinkBeerMaxTime = 30; //30
         public int guestDrinkBeerMinTime = 20; //20
-        public bool pubOpen = true;
+        public bool pubOpenButton = false;
 
     }
 }

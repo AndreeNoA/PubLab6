@@ -29,7 +29,6 @@ namespace PubLab
         public static ItemsCollection<DirtyGlass> dirtyGlasses;
         public static ItemsBag<GlassOnTray> trayOfDirtyGlasses;
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -95,6 +94,11 @@ namespace PubLab
                     labelClosingTime.Content = $"Time to closing: {PubSettings.MyPub().openCountdown}";
                     labelAvailableChairs.Content = $"Available Chairs: {chairs.itemBag.Count}";
                     labelAvailableGlasses.Content = $"Number of clean glasses: {cleanGlasses.itemBag.Count}";
+
+                    if (PubSettings.MyPub().pubOpenButton == true)
+                        {
+                            openBarButton.IsEnabled = true;
+                        }
                 });
                 Thread.Sleep(100);
             }
@@ -110,7 +114,6 @@ namespace PubLab
             closeBarButton.IsEnabled = false;
             closeBarButton.Visibility = Visibility.Hidden;
             PubSettings.MyPub().openCountdown = 1;
-            openBarButton.IsEnabled = true;
             openBarButton.Visibility = Visibility.Visible;
         }
 
