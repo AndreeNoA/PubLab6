@@ -8,7 +8,7 @@ namespace PubLab
 {
     public class PubSettings
     {                 
-        private int numOfUsedGlasses;
+        //private int numOfUsedGlasses;
         private int numOfGlasses = 8; // 8
         private int numOfChairs = 9; // 9
         private int openDuration = 120; // 120 
