@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PubLab
 {
 
-    public class Guest : TimeAndItems
+    public class Guest : TimeAndLog
     {
         public string Name { get; private set; }        
        
@@ -45,53 +45,53 @@ namespace PubLab
             "Åsa"
         };
 
-        public Guest()
+        public Guest(Puben pub)
         {
-            Name = nameList[random.Next(nameList.Length - 1)];
+            Name = nameList[pub.random.Next(nameList.Length - 1)];
         }
 
-        public void GuestActions(Action<string, object> logText)
+        public void GuestActions(Action<string, object> logText, Puben pub, PubSettings pubset)
         {
-            bool isChairFree = MainWindow.chairs.itemBag.TryPeek(out chair);
+            bool isChairFree = pub.chairs.itemBag.TryPeek(out pub.chair);
             LogText = logText;
 
-            GuestEnter();
-            while (!QueueToChair.Contains(this))
+            GuestEnter(pub, pubset);
+            while (!pub.QueueToChair.Contains(this))
             {
                 Thread.Sleep(100);
             }
-            GuestLookingForChair();
-            while (MainWindow.chairs.itemBag.Count == 0)
+            GuestLookingForChair(pub, pubset);
+            while (pub.chairs.itemBag.Count == 0)
             {
                 Thread.Sleep(100);
             }
-            GuestDrinks();
-            GuestLeaves();
+            GuestDrinks(pub, pubset);
+            GuestLeaves(pub, pubset);
         }
-        private void GuestEnter()
+        private void GuestEnter(Puben pub, PubSettings pubset)
         {
-            guestsInPub++;
+            pub.guestsInPub++;
             LogText?.Invoke($"{Name} enters BaBar, and goes to the bar", this);
-            TimeToWait(PubSettings.MyPub().guestWalkToBar);
-            QueueAtBar.Add(this);           
+            TimeToWait(pubset.GuestWalkToBar);
+            pub.QueueAtBar.Add(this);           
         }
-        private void GuestLookingForChair()
+        private void GuestLookingForChair(Puben pub, PubSettings pubset)
         {
             LogText?.Invoke($"{Name} takes the beer and looks for a chair", this);
-            TimeToWait(PubSettings.MyPub().guestWalkToChair);
+            TimeToWait(pubset.GuestWalkToChair);
         }
-        private void GuestDrinks()
+        private void GuestDrinks(Puben pub, PubSettings pubset)
         {
-            MainWindow.chairs.itemBag.TryTake(out chair);
+            pub.chairs.itemBag.TryTake(out pub.chair);
             LogText?.Invoke($"{Name} sits down and drinks the beer", this);
-            TimeToWait(random.Next(PubSettings.MyPub().guestDrinkBeerMinTime, PubSettings.MyPub().guestDrinkBeerMaxTime));
+            TimeToWait(pub.random.Next(pubset.GuestDrinkBeerMinTime, pubset.GuestDrinkBeerMaxTime));
         }
-        private void GuestLeaves()
+        private void GuestLeaves(Puben pub, PubSettings pubset)
         {
-            MainWindow.dirtyGlasses.itemCollection.Add(dirtyGlass);
+            pub.dirtyGlasses.itemCollection.Add(pub.dirtyGlass);
             LogText?.Invoke($"{Name} leaves the bar", this);
-            MainWindow.chairs.itemBag.Add(chair);
-            guestsInPub--;
+            pub.chairs.itemBag.Add(pub.chair);
+            pub.guestsInPub--;
         }
     }
 }

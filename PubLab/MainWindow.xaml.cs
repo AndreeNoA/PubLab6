@@ -16,30 +16,21 @@ using System.Windows.Shapes;
 
 namespace PubLab
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         private int actionCount = 1;
         private static CancellationTokenSource cancelProgramTokenSource = new CancellationTokenSource();
         public CancellationToken cancelProgramToken = cancelProgramTokenSource.Token;
-        public static ItemsBag<Chair> chairs;
-        public static ItemsBag<CleanGlass> cleanGlasses;
-        public static ItemsCollection<DirtyGlass> dirtyGlasses;
-        public static ItemsBag<GlassOnTray> trayOfDirtyGlasses;
+        Puben pub = new Puben();
+        UserPubSettings userset = new UserPubSettings();
 
         public MainWindow()
         {
             InitializeComponent();
             closeBarButton.Visibility = Visibility.Hidden;
-            chairs = new ItemsBag<Chair>();
-            cleanGlasses = new ItemsBag<CleanGlass>();
-            dirtyGlasses = new ItemsCollection<DirtyGlass>();
-            trayOfDirtyGlasses = new ItemsBag<GlassOnTray>();
-
-            chairs.CreateItems(new Chair(), PubSettings.MyPub().numOfChairs);
-            cleanGlasses.CreateItems(new CleanGlass(), PubSettings.MyPub().numOfGlasses);
+            userset.BusOfGuests();
+            pub.CreatePub(userset);
         }
 
         private void OpenBarButton_Click(object sender, RoutedEventArgs e)
@@ -48,16 +39,17 @@ namespace PubLab
             openBarButton.Visibility = Visibility.Hidden;
             closeBarButton.IsEnabled = true;
             closeBarButton.Visibility = Visibility.Visible;
-            PubSettings.MyPub().openCountdown = PubSettings.MyPub().openDuration;
+            userset.PubOpenButton = false;
+            userset.OpenCountdown = userset.BarOpenDuration;            
             CountdownTimer();
-            GuestListBox.Items.Insert(0, "Bar has opened");
+            GuestListBox.Items.Insert(0, "BaBar has opened");
 
             Bartender bartender = new Bartender();
             Waiter waiter = new Waiter();
             Bouncer bouncer = new Bouncer();
-            Task.Run(() => { bouncer.BouncerActions(AddToLists); });
-            Task.Run(() => { bartender.BartenderActions(AddToLists, cleanGlasses); });
-            Task.Run(() => { waiter.WaiterActions(AddToLists, cleanGlasses, dirtyGlasses, trayOfDirtyGlasses); });
+            Task.Run((Action)(() => { bouncer.BouncerActions(this.AddToLists, pub, (PubSettings)this.userset); }));
+            Task.Run((Action)(() => { bartender.BartenderActions(this.AddToLists, pub, (PubSettings)this.userset); }));
+            Task.Run((Action)(() => { waiter.WaiterActions(this.AddToLists, pub, (PubSettings)this.userset); }));
             Task.Run(() => { UpdateLabels(); });           
         }
         
@@ -68,16 +60,16 @@ namespace PubLab
             {
                 switch (sender)
                 {
-                    case Guest _:
+                    case Guest guest:
                         GuestListBox.Items.Insert(0, action);                        
                         break;
-                    case Bartender _:
+                    case Bartender bartender:
                         BartenderListBox.Items.Insert(0, action);
                         break;
-                    case Waiter _:
+                    case Waiter waiter:
                         WaiterListBox.Items.Insert(0, action);
                         break;
-                    case Bouncer _:
+                    case Bouncer bouncer:
                         GuestListBox.Items.Insert(0, action);
                         break;
                 }
@@ -88,18 +80,18 @@ namespace PubLab
         {
             while (!cancelProgramToken.IsCancellationRequested)
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.Invoke((Action)(() =>
                 {
-                    labelGuestsAtBar.Content = $"Number of guests in pub: {Guest.guestsInPub}";
-                    labelClosingTime.Content = $"Time to closing: {PubSettings.MyPub().openCountdown}";
-                    labelAvailableChairs.Content = $"Available Chairs: {chairs.itemBag.Count}";
-                    labelAvailableGlasses.Content = $"Number of clean glasses: {cleanGlasses.itemBag.Count}";
+                    labelGuestsAtBar.Content = $"Number of guests in pub: {pub.guestsInPub}";
+                    labelClosingTime.Content = $"Time to closing: {this.userset.OpenCountdown}";
+                    labelAvailableChairs.Content = $"Available Chairs: {pub.chairs.itemBag.Count}";
+                    labelAvailableGlasses.Content = $"Number of clean glasses: {pub.cleanGlasses.itemBag.Count}";
 
-                    if (PubSettings.MyPub().pubOpenButton == true)
+                    if (this.userset.PubOpenButton == true)
                         {
-                            openBarButton.IsEnabled = true;
+                        openBarButton.IsEnabled = true;
                         }
-                });
+                }));
                 Thread.Sleep(100);
             }
         }
@@ -113,20 +105,20 @@ namespace PubLab
         {
             closeBarButton.IsEnabled = false;
             closeBarButton.Visibility = Visibility.Hidden;
-            PubSettings.MyPub().openCountdown = 1;
+            userset.OpenCountdown = 1;
             openBarButton.Visibility = Visibility.Visible;
         }
 
         private void CountdownTimer()
         {
-            Task.Run(() =>
+            Task.Run((Action)(() =>
             {
-                while (PubSettings.MyPub().openCountdown > 0)
+                while (this.userset.OpenCountdown > 0)
                 {
                     Guest.TimeToWait(1);
-                    PubSettings.MyPub().openCountdown--;
+                    this.userset.OpenCountdown--;
                 }                
-            });            
+            }));            
         }
     }
 }

@@ -2,35 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PubLab
 {
-    public class Bouncer : TimeAndItems
+    public class Bouncer : TimeAndLog
     {
-        public void BouncerActions(Action<string, object> logText)
+        public void BouncerActions(Action<string, object> logText, Puben pub, PubSettings pubset)
         {
             while (true)
             {
-                if (PubSettings.MyPub().openCountdown > PubSettings.MyPub().bouncerMaxNewGuestTimer)
+                while (pubset.IsBusWithGuestsComing is true)
                 {
-                    TimeToWait(random.Next(PubSettings.MyPub().bouncerMinNewGuestTimer, PubSettings.MyPub().bouncerMaxNewGuestTimer));
-                    CreateGuest(logText);
+                    if (pubset.OpenCountdown < 100)
+                    {
+                        pubset.NumberOfEnteringGuests = 15;                        
+                        CreateGuest(logText, pub, pubset);
+                        pubset.IsBusWithGuestsComing = false;
+                        pubset.NumberOfEnteringGuests = 1;
+                    }
+                    else if (pubset.OpenCountdown > pubset.BouncerMaxNewGuestTimer)
+                    {
+                        TimeToWait(pub.random.Next(pubset.BouncerMinNewGuestTimer, pubset.BouncerMaxNewGuestTimer));
+                        CreateGuest(logText, pub, pubset);
+                    }
+
                 }
-                else if (PubSettings.MyPub().openCountdown == 0)
+                if (pubset.OpenCountdown > pubset.BouncerMaxNewGuestTimer)
+                {
+                    TimeToWait(pub.random.Next(pubset.BouncerMinNewGuestTimer, pubset.BouncerMaxNewGuestTimer));
+                    CreateGuest(logText, pub, pubset);
+                }
+                else if (pubset.OpenCountdown == 0)
                 {
                     logText("Bouncern goes home", this);
                     break;
                 }
             }
         }
-        public void CreateGuest(Action<string, object> logText)
+
+        public void CreateGuest(Action<string, object> logText, Puben pub, PubSettings pubset)
         {
-            Task.Run(() =>
+            for (int i = 0; i < pubset.NumberOfEnteringGuests; i++)
             {
-                Guest guest = new Guest();
-                guest.GuestActions(logText);
-            });
+                Task.Run(() =>
+                  {                    
+                    Guest guest = new Guest(pub);
+                    guest.GuestActions(logText, pub, pubset);
+                    Thread.Sleep(10);
+                  });
+            }
         }
     }
 }
