@@ -23,7 +23,7 @@ namespace PubLab
         private static CancellationTokenSource cancelProgramTokenSource = new CancellationTokenSource();
         public CancellationToken cancelProgramToken = cancelProgramTokenSource.Token;
         Puben pub = new Puben();
-        UserPubSettings userset = new UserPubSettings();
+        UserPubSettings userPubSettings = new UserPubSettings();
 
         public MainWindow()
         {
@@ -34,27 +34,28 @@ namespace PubLab
 
         private void OpenBarButton_Click(object sender, RoutedEventArgs e)
         {
-            pub.CreatePub(userset);
+            pub.CreatePub(userPubSettings);
             CountdownTimer();
             openBarButton.IsEnabled = false;
             openBarButton.Visibility = Visibility.Hidden;
             closeBarButton.IsEnabled = true;
             closeBarButton.Visibility = Visibility.Visible;
             simulationChoiceMenu.Visibility = Visibility.Hidden;
+            simulationSettingsLabel.Visibility = Visibility.Hidden;
             WaiterListBox.Items.Clear();
             BartenderListBox.Items.Clear();
             GuestListBox.Items.Clear();
             actionCount = 0;
             GuestListBox.Items.Insert(0, "BaBar has opened");
-            userset.PubOpenButton = false;
-            userset.OpenCountdown = userset.BarOpenDuration;            
+            userPubSettings.PubOpenButton = false;
+            userPubSettings.OpenCountdown = userPubSettings.BarOpenDuration;            
 
             Bartender bartender = new Bartender();
             Waiter waiter = new Waiter();
             Bouncer bouncer = new Bouncer();
-            Task.Run((Action)(() => { bouncer.BouncerActions(this.AddToLists, pub, (PubSettings)this.userset); }));
-            Task.Run((Action)(() => { bartender.BartenderActions(this.AddToLists, pub, (PubSettings)this.userset); }));
-            Task.Run((Action)(() => { waiter.WaiterActions(this.AddToLists, pub, (PubSettings)this.userset); }));
+            Task.Run((Action)(() => { bouncer.BouncerActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
+            Task.Run((Action)(() => { bartender.BartenderActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
+            Task.Run((Action)(() => { waiter.WaiterActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
             Task.Run(() => { UpdateLabels(); });           
         }
         
@@ -88,17 +89,18 @@ namespace PubLab
                 Dispatcher.Invoke((Action)(() =>
                 {
                     labelGuestsAtBar.Content = $"Number of guests in pub: {pub.guestsInPub}";
-                    labelClosingTime.Content = $"Time to closing: {this.userset.OpenCountdown}";
+                    labelClosingTime.Content = $"Time to closing: {this.userPubSettings.OpenCountdown}";
                     labelAvailableChairs.Content = $"Available Chairs: {pub.chairs.itemBag.Count}";
                     labelAvailableGlasses.Content = $"Number of clean glasses: {pub.cleanGlasses.itemBag.Count}";
 
-                    if (this.userset.PubOpenButton == true)
+                    if (this.userPubSettings.PubOpenButton == true)
                         {
                         openBarButton.IsEnabled = true;
                         }
-                    if (userset.OpenCountdown == 0 && openBarButton.IsEnabled == true)
+                    if (userPubSettings.OpenCountdown == 0 && openBarButton.IsEnabled == true)
                     {
                         simulationChoiceMenu.Visibility = Visibility.Visible;
+                        simulationSettingsLabel.Visibility = Visibility.Visible;
                     }
                 }));
                 Thread.Sleep(100);
@@ -114,7 +116,7 @@ namespace PubLab
         {
             closeBarButton.IsEnabled = false;
             closeBarButton.Visibility = Visibility.Hidden;
-            userset.OpenCountdown = 1;
+            userPubSettings.OpenCountdown = 1;
             openBarButton.Visibility = Visibility.Visible;
         }
 
@@ -122,10 +124,10 @@ namespace PubLab
         {
             Task.Run((Action)(() =>
             {
-                while (this.userset.OpenCountdown > 0)
+                while (this.userPubSettings.OpenCountdown > 0)
                 {
-                    Guest.TimeToWait(1);
-                    this.userset.OpenCountdown--;
+                    Guest.TimeToWait(1, userPubSettings.PubSimulationSpeed);
+                    this.userPubSettings.OpenCountdown--;
                 }                
             }));            
         }
@@ -138,35 +140,39 @@ namespace PubLab
                     openBarButton.IsEnabled = true;
                     break;
                 case 1:
-                    userset.TwentyGlassesThreeChairs();
+                    userPubSettings.TwentyGlassesThreeChairs();
                     openBarButton.IsEnabled = true;
                     break;
                 case 2:
-                    userset.FiveGlassesTwentyChairs();
+                    userPubSettings.FiveGlassesTwentyChairs();
                     openBarButton.IsEnabled = true;
                     break;
                 case 3:
-                    userset.SlowGuests();
+                    userPubSettings.SlowGuests();
                     openBarButton.IsEnabled = true;
                     break;
                 case 4:
-                    userset.WaiterOnSpeed();
+                    userPubSettings.WaiterOnSpeed();
                     openBarButton.IsEnabled = true;
                     break;
                 case 5:
-                    userset.BarDoubleOpenTime();
+                    userPubSettings.BarDoubleOpenTime();
                     openBarButton.IsEnabled = true;
                     break;
                 case 6:
-                    userset.CouplesNight();
+                    userPubSettings.CouplesNight();
                     openBarButton.IsEnabled = true;
                     break;
                 case 7:
-                    userset.BusOfGuests();
+                    userPubSettings.BusOfGuests();
                     openBarButton.IsEnabled = true;
                     break;
-            }
-               
+            }               
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            userPubSettings.PubSimulationSpeed = Convert.ToInt32(simulationSpeedSlider.Value);
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PubLab"
         mc:Ignorable="d"
         Title="MainWindow" Height="553.361" Width="1154.202" Closing="Window_Closing">
-    <Grid>
+    <Grid x:Name="simulationSpeedLabel1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="633*"/>
             <ColumnDefinition Width="497*"/>
@@ -34,6 +34,10 @@
             <ComboBoxItem Content="Couples night"/>
             <ComboBoxItem Content="Buss"/>
         </ComboBox>
+        <Slider x:Name="simulationSpeedSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="274.6,436,0,0" VerticalAlignment="Top" Height="24" Width="102" Maximum="3" TickPlacement="TopLeft" Minimum="1" IsSnapToTickEnabled="True" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="TopLeft"/>
+        <Label x:Name="simulationSpeedLabel" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="311.6,410,0,0" VerticalAlignment="Top"/>
+        <Label Content="Simulation Speed" Grid.Column="1" HorizontalAlignment="Left" Margin="274.6,392,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,-0.199"/>
+        <Label x:Name="simulationSettingsLabel" Grid.ColumnSpan="2" Content="Simulation Settings" HorizontalAlignment="Left" Margin="572,372,0,0" VerticalAlignment="Top" Width="119" RenderTransformOrigin="-0.2,-1.262"/>
 
     </Grid>
 </Window>

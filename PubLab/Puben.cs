@@ -24,14 +24,14 @@ namespace PubLab
         
         public int guestsInPub;
 
-        public void CreatePub(PubSettings pubset)
+        public void CreatePub(PubSettings userPubSettings)
         {
             chairs = new ItemsBag<Chair>();
             cleanGlasses = new ItemsBag<CleanGlass>();
             dirtyGlasses = new ItemsCollection<DirtyGlass>();
             trayOfDirtyGlasses = new ItemsBag<GlassOnTray>();
-            chairs.CreateBagOfItems(new Chair(), pubset.NumOfChairs);
-            cleanGlasses.CreateBagOfItems(new CleanGlass(), pubset.NumOfGlasses);
+            chairs.CreateBagOfItems(new Chair(), userPubSettings.NumOfChairs);
+            cleanGlasses.CreateBagOfItems(new CleanGlass(), userPubSettings.NumOfGlasses);
         }
     }
     public class ItemsBag<T> where T : class, new()

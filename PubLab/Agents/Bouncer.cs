@@ -7,34 +7,34 @@ using System.Threading.Tasks;
 
 namespace PubLab
 {
-    public class Bouncer : TimeAndLog
+    public class Bouncer : Agents
     {
-        public void BouncerActions(Action<string, object> logText, Puben pub, PubSettings pubset)
+        public void BouncerActions(Action<string, object> logText, Puben pub, PubSettings userPubSettings)
         {
             while (true)
             {
-                while (pubset.IsBusWithGuestsComing is true)
+                while (userPubSettings.IsBusWithGuestsComing is true)
                 {
-                    if (pubset.OpenCountdown < 100)
+                    if (userPubSettings.OpenCountdown < 100)
                     {
-                        pubset.NumberOfEnteringGuests = 15;                        
-                        CreateGuest(logText, pub, pubset);
-                        pubset.IsBusWithGuestsComing = false;
-                        pubset.NumberOfEnteringGuests = 1;
+                        userPubSettings.NumberOfEnteringGuests = 15;                        
+                        CreateGuest(logText, pub, userPubSettings);
+                        userPubSettings.IsBusWithGuestsComing = false;
+                        userPubSettings.NumberOfEnteringGuests = 1;
                     }
-                    else if (pubset.OpenCountdown > pubset.BouncerMaxNewGuestTimer)
+                    else if (userPubSettings.OpenCountdown > userPubSettings.BouncerMaxNewGuestTimer)
                     {
-                        TimeToWait(pub.random.Next(pubset.BouncerMinNewGuestTimer, pubset.BouncerMaxNewGuestTimer));
-                        CreateGuest(logText, pub, pubset);
+                        TimeToWait(pub.random.Next(userPubSettings.BouncerMinNewGuestTimer, userPubSettings.BouncerMaxNewGuestTimer), userPubSettings.PubSimulationSpeed);
+                        CreateGuest(logText, pub, userPubSettings);
                     }
 
                 }
-                if (pubset.OpenCountdown > pubset.BouncerMaxNewGuestTimer)
+                if (userPubSettings.OpenCountdown > userPubSettings.BouncerMaxNewGuestTimer)
                 {
-                    TimeToWait(pub.random.Next(pubset.BouncerMinNewGuestTimer, pubset.BouncerMaxNewGuestTimer));
-                    CreateGuest(logText, pub, pubset);
+                    TimeToWait(pub.random.Next(userPubSettings.BouncerMinNewGuestTimer, userPubSettings.BouncerMaxNewGuestTimer), userPubSettings.PubSimulationSpeed);
+                    CreateGuest(logText, pub, userPubSettings);
                 }
-                else if (pubset.OpenCountdown == 0)
+                else if (userPubSettings.OpenCountdown == 0)
                 {
                     logText("Bouncern goes home", this);
                     break;
