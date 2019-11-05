@@ -25,7 +25,7 @@ namespace PubLab
                 {
                     printBartenderListBox("Bartender goes to shelf", this); 
                     while (pub.cleanGlasses.itemBag.Count == 0)
-                        Thread.Sleep(1000);
+                        Thread.Sleep(100);
 
                     if (pub.cleanGlasses.itemBag.Count > 0)
                     {
