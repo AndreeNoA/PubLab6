@@ -7,14 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace PubLab
-{
-    
-    public abstract class TimeAndLog
+{    
+    public abstract class Agents
     {
         public Action<string, object> LogText { get; set; }
-        public static void TimeToWait(int milliseconds)
+
+        public static void TimeToWait(int milliseconds, int pubSimulationSpeed)
         {
-            Thread.Sleep(Convert.ToInt32(milliseconds * 1000));
+            Thread.Sleep(Convert.ToInt32((milliseconds * 1000) / pubSimulationSpeed));
         }
 
     }

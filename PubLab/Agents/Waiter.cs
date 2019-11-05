@@ -7,28 +7,31 @@ using System.Threading.Tasks;
 
 namespace PubLab
 {
-    class Waiter : TimeAndLog
+    class Waiter : Agents
     {
-        public void WaiterActions(Action<string, object> printWaiterListBox, Puben pub, PubSettings pubset)
+        public void WaiterActions(Action<string, object> printWaiterListBox, Puben pub, PubSettings userPubSettings)
         {
-            while (pubset.OpenCountdown > 0 || pub.dirtyGlasses.itemCollection.Count > 0 || pub.guestsInPub > 0 || pub.trayOfDirtyGlasses.itemBag.Count > 0)
+            while (userPubSettings.OpenCountdown > 0 || pub.dirtyGlasses.itemCollection.Count > 0 || pub.guestsInPub > 0 || pub.trayOfDirtyGlasses.itemBag.Count > 0)
             {
                 if (pub.dirtyGlasses.itemCollection.Count == 0)
                 {
-                    printWaiterListBox("Waiting for glasses to clean", this);                    
-                    TimeToWait(10);
+                    printWaiterListBox("Waiting for glasses to clean", this);
+                    while (pub.dirtyGlasses.itemCollection.Count == 0)
+                    {
+                        Thread.Sleep(100);
+                    }
                 }
                 if (pub.dirtyGlasses.itemCollection.Count > 0)
                 {
                     printWaiterListBox("Picking up dirty glasses", this);
-                    TimeToWait(pubset.WaiterPickUpGlassesTime);
+                    TimeToWait(userPubSettings.WaiterPickUpGlassesTime, userPubSettings.PubSimulationSpeed);
                     foreach (var dirtyGlass in pub.dirtyGlasses.itemCollection)
                     {
                         pub.trayOfDirtyGlasses.itemBag.Add(new GlassOnTray());
                         pub.dirtyGlasses.itemCollection.Take();
                     }
                     printWaiterListBox("Cleaning glasses", this);
-                    TimeToWait(pubset.WaiterCleanGlassesTime);
+                    TimeToWait(userPubSettings.WaiterCleanGlassesTime, userPubSettings.PubSimulationSpeed);
                     foreach (var glassOnTrayOut in pub.trayOfDirtyGlasses.itemBag)
                     {
                         pub.cleanGlasses.itemBag.Add(new CleanGlass());
@@ -38,7 +41,7 @@ namespace PubLab
                 }                
             }
             printWaiterListBox("Waiter goes home", this);
-            pubset.PubOpenButton = true;
+            userPubSettings.PubOpenButton = true;
         }
     }
 }

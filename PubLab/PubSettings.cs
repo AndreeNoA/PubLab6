@@ -26,6 +26,7 @@ namespace PubLab
         private bool pubOpenButton = false;
         private int numberOfEnteringGuests = 1;
         private bool isBusWithGuestsComing = false;
+        private int pubSimulationSpeed = 1;
 
         public int NumOfGlasses { get => numOfGlasses; set => numOfGlasses = value; }
         public int NumOfChairs { get => numOfChairs; set => numOfChairs = value; }
@@ -44,6 +45,7 @@ namespace PubLab
         public bool PubOpenButton { get => pubOpenButton; set => pubOpenButton = value; }
         public int NumberOfEnteringGuests { get => numberOfEnteringGuests; set => numberOfEnteringGuests = value; }
         public bool IsBusWithGuestsComing { get => isBusWithGuestsComing; set => isBusWithGuestsComing = value; }
+        public int PubSimulationSpeed { get => pubSimulationSpeed; set => pubSimulationSpeed = value; }
     }
 
     public class UserPubSettings : PubSettings
