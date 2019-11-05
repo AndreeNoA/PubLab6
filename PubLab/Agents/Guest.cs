@@ -52,7 +52,6 @@ namespace PubLab
 
         public void GuestActions(Action<string, object> logText, Puben pub, PubSettings userPubSettings)
         {
-            //bool isChairFree = pub.chairs.itemBag.TryPeek(out pub.chair);
             LogText = logText;
 
             GuestEnter(pub, userPubSettings);
