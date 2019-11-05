@@ -53,9 +53,9 @@ namespace PubLab
             Bartender bartender = new Bartender();
             Waiter waiter = new Waiter();
             Bouncer bouncer = new Bouncer();
-            Task.Run((Action)(() => { bouncer.BouncerActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
-            Task.Run((Action)(() => { bartender.BartenderActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
-            Task.Run((Action)(() => { waiter.WaiterActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); }));
+            Task.Run(() => { bouncer.BouncerActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); });
+            Task.Run(() => { bartender.BartenderActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); });
+            Task.Run(() => { waiter.WaiterActions(this.AddToLists, pub, (PubSettings)this.userPubSettings); });
             Task.Run(() => { UpdateLabels(); });           
         }
         
